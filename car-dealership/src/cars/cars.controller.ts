@@ -44,6 +44,6 @@ export class CarsController {
 
   @Delete(':id')
   deleteCar(@Param('id', ParseUUIDPipe) id: string) {
-    return { message: `Delete car ${id} endpoint - to be implemented` };
+    return this.carsService.delete(id);
   }
 }
