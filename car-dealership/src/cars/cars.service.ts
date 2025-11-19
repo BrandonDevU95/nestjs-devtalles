@@ -15,11 +15,11 @@ export class CarsService {
     { id: uuid(), make: 'Tesla', model: 'Model 3', year: 2022 },
   ];
 
-  public findAll() {
+  findAll() {
     return this.cars;
   }
 
-  public findById(id: string) {
+  findById(id: string) {
     const car = this.cars.find((car) => car.id === id);
 
     if (!car) {
@@ -29,7 +29,7 @@ export class CarsService {
     return car;
   }
 
-  public create(createCarDto: CreateCarDto) {
+  create(createCarDto: CreateCarDto) {
     const newCar: Car = {
       id: uuid(),
       ...createCarDto,
@@ -38,7 +38,7 @@ export class CarsService {
     return newCar;
   }
 
-  public update(id: string, updateCarDto: UpdateCarDto) {
+  update(id: string, updateCarDto: UpdateCarDto) {
     let carDB = this.findById(id);
     this.cars = this.cars.map((c) => {
       if (c.id === id) {
@@ -50,9 +50,13 @@ export class CarsService {
     return carDB;
   }
 
-  public delete(id: string) {
+  delete(id: string) {
     const car = this.findById(id);
     this.cars = this.cars.filter((c) => c.id !== id);
     return car;
+  }
+
+  fillCarsWithSeedData(cars: Car[]) {
+    this.cars = cars;
   }
 }
