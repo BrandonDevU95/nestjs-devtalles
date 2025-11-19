@@ -8,7 +8,9 @@ async function bootstrap() {
     new ValidationPipe({
       whitelist: true, // elimina propiedades no definidas en el DTO
       forbidNonWhitelisted: true, // lanza un error si hay propiedades no definidas en el DTO
-      transform: true, // transforma las entradas al tipo definido en el DTO
+      transformOptions: {
+        exposeUnsetFields: false, // no expone campos no definidos en el DTO
+      },
     }),
   );
   await app.listen(process.env.PORT ?? 3000);
