@@ -29,7 +29,6 @@ export class CarsController {
   }
 
   @Post()
-  @UsePipes(ValidationPipe)
   createCar(@Body() createCarDto: CreateCarDto) {
     return {
       message: `Create car ${createCarDto.make} ${createCarDto.model}, ${createCarDto.year} - to be implemented`,
