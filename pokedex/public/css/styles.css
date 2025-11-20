@@ -1,0 +1,12 @@
+html,
+body {
+  margin: 0;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  background-color: gray;
+}
+
+h1 {
+  font-size: 40px;
+  color: darkblue;
+}
