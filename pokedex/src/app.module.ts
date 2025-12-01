@@ -1,6 +1,7 @@
 import { CommonModule } from './common/common.module';
 import { ConfigModule } from '@nestjs/config';
 import { EnvConfig } from './config/app.config';
+import { JoiValidationSchema } from './config/joi.valitacion';
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { PokemonModule } from './pokemon/pokemon.module';
@@ -12,7 +13,8 @@ import { join } from 'path';
   imports: [
     ConfigModule.forRoot({
       load: [EnvConfig],
-    }), // Esta línea carga las variables de entorno desde el archivo .env
+      validationSchema: JoiValidationSchema,
+    }), // Esta línea carga las variables de entorno desde el archivo .env y las valida usando Joi
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'public'),
     }), // Sirve archivos estáticos desde la carpeta 'public'
