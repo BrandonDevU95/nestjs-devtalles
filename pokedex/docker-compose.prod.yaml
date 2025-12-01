@@ -10,10 +10,10 @@ services:
     ports:
       - '${PORT}:${PORT}'
     environment:
-      MONGODB_URI: ${MONGODB_URI}
+      MONGO_URI: ${MONGO_URI}
       PORT: ${PORT}
       DEFAULT_LIMIT: ${DEFAULT_LIMIT}
-      NODE_ENV: production
+      NODE_ENV: prod
   db:
     image: mongo:5
     container_name: mongo-db
@@ -32,7 +32,8 @@ services:
     ports:
       - '8081:8081'
     environment:
-      ME_CONFIG_MONGODB_SERVER: db
+      ME_CONFIG_MONGODB_SERVER: mongo-db
       ME_CONFIG_MONGODB_PORT: 27017
+      ME_CONFIG_MONGODB_URL: mongodb://mongo-db:27017/
     depends_on:
       - db

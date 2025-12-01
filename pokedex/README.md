@@ -66,6 +66,18 @@ npm run start:dev
 http://localhost:3000/api/v2/seed
 ```
 
+## Construir y levantar la aplicación con Docker
+
+```
+docker-compose -f docker-compose.prod.yaml up -d --build
+```
+
+## Levantar la aplicación con Docker y archivo de entorno personalizado
+
+```
+docker-compose -f docker-compose.prod.yaml --env-file .env.prod up -d
+```
+
 ## License
 
 Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
