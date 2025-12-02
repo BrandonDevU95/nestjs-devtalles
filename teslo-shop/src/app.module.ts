@@ -1,6 +1,7 @@
 import { ConfigModule } from '@nestjs/config';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ProductsModule } from './products/products.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       autoLoadEntities: true, // Carga automática de entidades registradas
       synchronize: process.env.POSTGRES_SYNC === 'true', // Sincroniza el esquema de la base de datos con las entidades (solo en desarrollo)
     }),
+    ProductsModule,
   ],
   controllers: [],
   providers: [],
