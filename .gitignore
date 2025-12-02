@@ -140,3 +140,5 @@ vite.config.ts.timestamp-*
 
 # Ignore mongo data files
 mongo
+pgadmin_data/
+postgres_data/
