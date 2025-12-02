@@ -22,8 +22,8 @@ services:
       - '27017:27017'
     environment:
       MONGODB_DATABASE: pokedex
-    # volumes:
-    #   - ./mongo:/data/db
+    volumes:
+      - ./mongo:/data/db
 
   mongo-express:
     image: mongo-express:latest
