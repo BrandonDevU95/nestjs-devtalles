@@ -78,6 +78,16 @@ docker-compose -f docker-compose.prod.yaml up -d --build
 docker-compose -f docker-compose.prod.yaml --env-file .env.prod up -d
 ```
 
+## production Build
+
+1.- Crear el archivo **.env.prod** basado en el archivo **.env.example**
+
+2.- Construir la aplicación
+
+```
+docker-compose -f docker-compose.prod.yaml up -d --build
+```
+
 ## License
 
 Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
