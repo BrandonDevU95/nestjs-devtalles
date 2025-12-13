@@ -2,7 +2,6 @@ services:
   db:
     image: mongo:5
     container_name: mongo-db
-    restart: always
     ports:
       - '27017:27017'
     environment:
@@ -13,7 +12,6 @@ services:
   mongo-express:
     image: mongo-express:latest
     container_name: mongo-express
-    restart: always
     ports:
       - '8081:8081'
     environment:
