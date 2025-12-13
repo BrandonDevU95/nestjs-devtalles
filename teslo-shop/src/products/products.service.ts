@@ -98,6 +98,8 @@ export class ProductsService {
     if (!product)
       throw new NotFoundException(`Product with id ${id} not found`);
 
+    const queryRunner = this.dataSource.createQueryRunner();
+
     try {
       await this.productRepository.save(product);
       return product;
