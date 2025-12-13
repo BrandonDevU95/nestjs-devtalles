@@ -1,7 +1,6 @@
 services:
   db:
     image: postgres:14.3
-    restart: always
     container_name: teslo-postgres
     environment:
       POSTGRES_USER: '${POSTGRES_USER}'
@@ -13,7 +12,6 @@ services:
       - ./postgres_data:/var/lib/postgresql/data
   pgadmin:
     image: dpage/pgadmin4
-    restart: always
     container_name: teslo-pgadmin
     environment:
       PGADMIN_DEFAULT_EMAIL: '${PGADMIN_DEFAULT_EMAIL}'
