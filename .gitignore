@@ -142,3 +142,6 @@ vite.config.ts.timestamp-*
 mongo
 pgadmin_data/
 postgres_data/
+
+# Uploaded files
+static/
