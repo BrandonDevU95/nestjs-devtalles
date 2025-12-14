@@ -1,7 +1,10 @@
 import {
   BadRequestException,
   Controller,
+  Get,
+  Param,
   Post,
+  Res,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
@@ -10,6 +13,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { FilesService } from './files.service';
 import { diskStorage } from 'multer';
 import { fileFilter, fileNamer } from './helpers';
+import type { Response } from 'express';
 
 @Controller('files')
 export class FilesController {
@@ -31,6 +35,15 @@ export class FilesController {
       throw new BadRequestException('File is empty or unsupported file type');
     }
 
-    return file;
+    const { filename } = file;
+
+    return { filename };
+  }
+
+  @Get('image/:name')
+  findImage(@Res() res: Response, @Param('name') name: string) {
+    const path = this.filesService.getStaticFile(name);
+
+    res.sendFile(path);
   }
 }
