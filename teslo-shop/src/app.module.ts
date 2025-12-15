@@ -1,10 +1,12 @@
-import { ConfigModule } from '@nestjs/config';
-import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { ProductsModule } from './products/products.module';
 import { CommonModule } from './common/common.module';
-import { SeedModule } from './seed/seed.module';
+import { ConfigModule } from '@nestjs/config';
 import { FilesModule } from './files/files.module';
+import { Module } from '@nestjs/common';
+import { ProductsModule } from './products/products.module';
+import { SeedModule } from './seed/seed.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { join } from 'path';
 
 @Module({
   imports: [
@@ -18,6 +20,9 @@ import { FilesModule } from './files/files.module';
       password: process.env.POSTGRES_PASSWORD,
       autoLoadEntities: true, // Carga automática de entidades registradas
       synchronize: process.env.POSTGRES_SYNC === 'true', // Sincroniza el esquema de la base de datos con las entidades (solo en desarrollo)
+    }),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'public'),
     }),
     ProductsModule,
     CommonModule,
