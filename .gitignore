@@ -145,3 +145,4 @@ postgres_data/
 
 # Uploaded files
 static/
+public/
