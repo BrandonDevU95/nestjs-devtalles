@@ -14,10 +14,14 @@ import { FilesService } from './files.service';
 import { diskStorage } from 'multer';
 import { fileFilter, fileNamer } from './helpers';
 import type { Response } from 'express';
+import { ConfigService } from '@nestjs/config';
 
 @Controller('files')
 export class FilesController {
-  constructor(private readonly filesService: FilesService) {}
+  constructor(
+    private readonly configService: ConfigService,
+    private readonly filesService: FilesService,
+  ) {}
 
   @Post('upload')
   @UseInterceptors(
@@ -35,9 +39,11 @@ export class FilesController {
       throw new BadRequestException('File is empty or unsupported file type');
     }
 
-    const { filename } = file;
+    const secureUrl = `${this.configService.get('HOST')}/files/image/${file.filename}`;
 
-    return { filename };
+    return {
+      secureUrl,
+    };
   }
 
   @Get('image/:name')
