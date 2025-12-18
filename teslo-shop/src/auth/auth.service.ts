@@ -1,18 +1,20 @@
-import { InjectRepository } from '@nestjs/typeorm';
-import { CreateUserDto } from './dto/create-user.tdo';
 import {
   BadRequestException,
   Injectable,
   InternalServerErrorException,
   Logger,
+  UnauthorizedException,
 } from '@nestjs/common';
-import { Repository } from 'typeorm';
-import { User } from './entities/user.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import * as bcrypt from 'bcrypt';
 import { hashSync } from 'bcrypt';
-
+import { Repository } from 'typeorm';
+import { CreateUserDto, LoginUserDto } from './dto';
+import { User } from './entities/user.entity';
 @Injectable()
 export class AuthService {
   private readonly logger = new Logger('AuthService');
+
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
@@ -26,11 +28,31 @@ export class AuthService {
         password: hashSync(password, 10),
       });
       await this.userRepository.save(user);
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { password: _, ...userWithoutPassword } = user;
       return userWithoutPassword;
     } catch (error) {
       this.handleDBExceptions(error);
     }
+  }
+
+  async login(loginUserDto: LoginUserDto) {
+    const { email, password } = loginUserDto;
+
+    const user = await this.userRepository.findOne({
+      where: { email },
+      select: { password: true, email: true },
+    });
+
+    if (!user) {
+      throw new UnauthorizedException('Credentials are not valid');
+    }
+
+    if (!bcrypt.compareSync(password, user.password)) {
+      throw new UnauthorizedException('Credentials are not valid');
+    }
+
+    return user;
   }
 
   private handleDBExceptions(error: any): never {
