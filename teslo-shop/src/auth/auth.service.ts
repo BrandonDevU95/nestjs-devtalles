@@ -35,7 +35,7 @@ export class AuthService {
       const { password: _, ...userWithoutPassword } = user;
       return {
         ...userWithoutPassword,
-        token: this.getTwtToken({ email: user.email }),
+        token: this.getJwtToken({ id: user.id }),
       };
     } catch (error) {
       this.handleDBExceptions(error);
@@ -47,7 +47,7 @@ export class AuthService {
 
     const user = await this.userRepository.findOne({
       where: { email },
-      select: { password: true, email: true },
+      select: { password: true, id: true },
     });
 
     if (!user) {
@@ -60,11 +60,11 @@ export class AuthService {
 
     return {
       ...user,
-      token: this.getTwtToken({ email: user.email }),
+      token: this.getJwtToken({ id: user.id }),
     };
   }
 
-  private getTwtToken(payload: JwtPayload) {
+  private getJwtToken(payload: JwtPayload) {
     const token = this.jwtService.sign(payload);
     return token;
   }
