@@ -29,6 +29,12 @@ export class AuthController {
     return this.authService.login(loginUserDto);
   }
 
+  @Get('check-status')
+  @Auth()
+  checkStatus(@GetUser() user: User) {
+    return this.authService.checkAuthStatus(user);
+  }
+
   @Get('private')
   //Al usar 'jwt' se fuerza explicitamente a usar la estrategia de jwt
   @UseGuards(AuthGuard('jwt'))
