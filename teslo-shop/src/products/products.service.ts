@@ -13,6 +13,7 @@ import { Product } from './entities/product.entity';
 import { PaginationDto } from 'src/common/dtos/pagination.dto';
 import { validate as isUUID } from 'uuid';
 import { ProductImage } from './entities';
+import { User } from 'src/auth/entities/user.entity';
 
 @Injectable()
 export class ProductsService {
@@ -28,11 +29,12 @@ export class ProductsService {
     private readonly dataSource: DataSource,
   ) {}
 
-  async create(createProductDto: CreateProductDto) {
+  async create(createProductDto: CreateProductDto, user: User) {
     try {
       const { images = [], ...productDetails } = createProductDto;
       const product = this.productRepository.create({
         ...productDetails,
+        user,
         images: images.map((image) =>
           this.productImageRepository.create({ url: image }),
         ),
@@ -88,7 +90,7 @@ export class ProductsService {
     };
   }
 
-  async update(id: string, updateProductDto: UpdateProductDto) {
+  async update(id: string, updateProductDto: UpdateProductDto, user: User) {
     const { images, ...toUpdate } = updateProductDto;
     const product = await this.productRepository.preload({
       id,
@@ -109,6 +111,7 @@ export class ProductsService {
       );
     }
 
+    product.user = user;
     try {
       await queryRunner.manager.save(product);
       await queryRunner.commitTransaction();
@@ -127,11 +130,23 @@ export class ProductsService {
     return { message: `Product with id ${id} has been removed` };
   }
 
-  private handleDBExceptions(error: any): never {
-    if (error.code === '23505') {
-      throw new BadRequestException(error.detail);
+  private handleDBExceptions(error: unknown): never {
+    const dbError = error as {
+      code?: string;
+      detail?: string;
+      message?: string;
+    };
+
+    if (
+      typeof error === 'object' &&
+      error !== null &&
+      'code' in error &&
+      dbError.code === '23505'
+    ) {
+      throw new BadRequestException(dbError.detail);
     }
-    this.logger.error(`Unexpected error: ${error.message}`);
+    const message = dbError.message ?? 'Unknown error';
+    this.logger.error(`Unexpected error: ${message}`);
     throw new InternalServerErrorException(
       'Unexpected error, check server logs',
     );
